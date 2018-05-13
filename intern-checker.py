@@ -4,6 +4,13 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 from time import sleep
 from os.path import expanduser
+from argparse import ArgumentParser
+
+parser = ArgumentParser(
+    description='Get current internship application status on Internshala')
+parser.add_argument(
+    '--login', help='Permit the user to login (Needs to be run once)', action='store_true')
+args = parser.parse_args()
 
 # Set the command line options for chromium web driver
 chrome_options = webdriver.ChromeOptions()
@@ -12,12 +19,20 @@ chrome_options = webdriver.ChromeOptions()
 path = '~/.config/Chromium'
 chrome_options.add_argument(f'user-data-dir={expanduser(path)}')
 
-# Sets X-Server WM - Class, can write code to minimize it so it appears headless
-chrome_options.add_argument('class=selenium-chrome')
+if not args.login:
+    # Makes it headless if there is no need to login
+    chrome_options.set_headless()
+
 
 driver = webdriver.Chrome(chrome_options=chrome_options)
 
 driver.get('http://www.internshala.com')
+# import pdb
+# pdb.set_trace()
+
+if args.login:
+    import pdb
+    pdb.set_trace()
 
 # Sleep for a while to ensure that the entire page is loaded
 sleep(2)
