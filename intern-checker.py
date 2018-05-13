@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 
 from selenium import webdriver
-import bs4
+from bs4 import BeautifulSoup
 from time import sleep
 from os.path import expanduser
 
 # Set the command line options for chromium web driver
 chrome_options = webdriver.ChromeOptions()
 
-# Change this to your chrome data dir usually ~/.config/chromium/ on *nix
-path = '~/.config/chromium'
+# Change this to your chrome data dir usually ~/.config/chromium/Default on *nix
+path = '~/.config/Chromium'
 chrome_options.add_argument(f'user-data-dir={expanduser(path)}')
 
 # Sets X-Server WM - Class, can write code to minimize it so it appears headless
@@ -21,9 +21,8 @@ driver.get('http://www.internshala.com')
 
 # Sleep for a while to ensure that the entire page is loaded
 sleep(2)
-
 # Get the page source and begin parsing with BS4
-soup = bs4.BeautifulSoup(driver.page_source, 'lxml')
+soup = BeautifulSoup(driver.page_source, 'lxml')
 
 # We no longer need the chrome window
 driver.close()
@@ -41,7 +40,6 @@ def getInternStatus(tag):
 
 # Pass a list of all the div tags to this function and then filter out all the exceptional cases
 internStatuses = list(filter(None, map(getInternStatus, soup.find_all('div'))))
-
 
 # Print out all the required intern statuses
 print(*internStatuses, sep=' | ')
